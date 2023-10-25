@@ -1,15 +1,20 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Paper.js Example</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.14/paper-full.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basic Paper.js Example</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.14/paper-full.min.js"></script>
 </head>
 <body>
-    <canvas id="myCanvas" resize></canvas>
+<canvas id="myCanvas" resize></canvas>
 
-    <script src="scripts.js"></script>
+<input type="number" id="speedInput" placeholder="Enter speed">
+<span id="speedDisplay">Speed: 0</span>
+<button id="startButton">Start Animation</button>
+<button id="endButton">End Animation</button>
 
+<script src="scripts.js" type="module"></script>
 </body>
 </html>

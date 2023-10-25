@@ -1,0 +1,24 @@
+{
+  "name": "rocketsimulator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ex.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaseyano/RocketSimulator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chaseyano/RocketSimulator/issues"
+  },
+  "homepage": "https://github.com/chaseyano/RocketSimulator#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
