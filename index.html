@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +9,29 @@
 <body>
 <canvas id="myCanvas" resize></canvas>
 
+
+<select id="material">
+    <option value="titanium">Titanium</option>
+    <option value="aluminium">Aluminium</option>
+    <option value="steel">Steel</option>
+</select>
+
+
+<select id="fuelType">
+    <option value="hydrogen">Hydrogen</option>
+    <option value="kerosene">Kerosene</option>
+    <option value="methane">Methane</option>
+</select>
+
+
+<button id="launchButton">Launch</button>
+
+
 <input type="number" id="speedInput" placeholder="Enter speed">
 <span id="speedDisplay">Speed: 0</span>
 <button id="startButton">Start Animation</button>
 <button id="endButton">End Animation</button>
+
 
 <script src="scripts.js" type="module"></script>
 </body>
