@@ -10,11 +10,12 @@ class Rocket {
         paper.setup(this.canvas);
  
  
-        this.rocketShape = new paper.Path.Rectangle({
-            point: [this.canvas.width / 2 - 50, this.canvas.height - 150], // Positioned at the bottom and centered horizontally
-            size: [50, 100],
-            fillColor: 'green'
-        });
+        this.rocketShape = new paper.Path();
+        this.rocketShape.add(new paper.Point(this.canvas.width / 2, this.canvas.height - 150)); // Bottom point
+        this.rocketShape.lineTo(new paper.Point(this.canvas.width / 2 - 25, this.canvas.height - 100)); // Left point
+        this.rocketShape.lineTo(new paper.Point(this.canvas.width / 2 + 25, this.canvas.height - 100)); // Right point
+        this.rocketShape.closePath(); // Close the path to create the triangle
+        this.rocketShape.fillColor = 'green'; // Fill the path with color
         this.rocketWeight = 0.0;
         if (material === "titanium") {
             this.rocketWeight = 100.0;
@@ -24,6 +25,30 @@ class Rocket {
             this.rocketWeight = 150.0;
         }
  
+
+        // Define the costs
+        this.costs = {
+            'titanium': 10000000, // $10 million
+            'aluminium': 5000000, // $5 million
+            'steel': 7500000, // $7.5 million
+            'hydrogen': 20000000, // $20 million
+            'kerosene': 10000000, // $10 million
+            'methane': 15000000, // $15 million
+        };
+
+        // Initialize budget
+        this.budget = 100000000; // $100 million
+
+        // Deduct the cost of the selected material and fuel type from the budget
+        this.budget -= this.costs[material];
+        this.budget -= this.costs[fuelType];
+
+        // Check if the budget has been exceeded
+        if (this.budget < 0) {
+            console.log('Budget exceeded!');
+            return;
+        }
+
  
         this.force = 0.0;
         this.fuelWeight = 0.0;
@@ -73,6 +98,7 @@ class Rocket {
  
     }
  
+    
  
     startAnimation() {
         if (!this.isAnimating) {
@@ -88,6 +114,13 @@ class Rocket {
  
  
     launch() {
+        // Check if the rocket can reach the required altitude
+        if (this.rocketShape.position.y <= 100) { // Assuming 100 is the required altitude
+            console.log('You win!');
+        } else {
+            console.log('You lose!');
+        }
+
         this.startAnimation();
     }
  
