@@ -53,13 +53,13 @@ class Rocket {
         this.force = 0.0;
         this.fuelWeight = 0.0;
         if (fuelType === "hydrogen") {
-            this.force = 50;
+            this.force = 500000;
             this.fuelWeight = 50.0;
         } else if (fuelType === "kerosene") {
-            this.force = 40;
+            this.force = 400000;
             this.fuelWeight = 60.0;
         } else if (fuelType === "methane") {
-            this.force = 45;
+            this.force = 450000;
             this.fuelWeight = 55.0;
         }
  
@@ -68,34 +68,37 @@ class Rocket {
         if ((fuelType === "hydrogen" && material === "titanium") || (fuelType === "kerosene" && material === "aluminium") || (fuelType === "methane" && material === "steel")) {
             this.weightLossConstant = 5.5;
         }
+        this.speed = 0.0;
     }
  
  
     animate() {
+        console.log("animate() called");
         if (!this.isAnimating) {
             return;
         }
- 
- 
-        //     // real rocket shouldn't bounce
-        // if (this.rocketShape.position.y - this.rocketShape.bounds.height / 2 <= 0) {
-        //     this.direction = 1; // Change direction to down
-        // } else if (this.rocketShape.position.y + this.rocketShape.bounds.height / 2 >= paper.view.size.height) {
-        //     this.direction = -1; // Change direction to up
-        // }
+        // Check if the rocket can reach the required altitude
+        if (this.rocketShape.position.y >= 1000) { // Assuming 100 is the required altitude
+            console.log('You win!');
+            this.isAnimating = false;
+            return;
+        }
+        
         console.log("rocket shape position y -> " + String(this.rocketShape.position.y) );
         console.log("this.canvas.height - 150 -> " + String(this.canvas.height - 150 ));
- 
- 
+
         this.getNewSpeed();
+        this.loseWeight();
         if (this.rocketShape.position.y >= this.canvas.height - 150) {
             console.log("position is above ground");
-            this.rocketShape.position.y += this.direction * this.speed; // Move the rocket vertically
+            console.log("A rocket shape position y -> " + String(this.rocketShape.position.y) );
+            console.log("this speed = " + String(this.speed));
+            this.rocketShape.position.y += this.speed; // Move the rocket vertically
+            console.log("B rocket shape position y -> " + String(this.rocketShape.position.y) );
+
         }
         paper.view.update(); // Update the view
         requestAnimationFrame(this.animate.bind(this)); // Bind 'this' to ensure correct context
- 
- 
     }
  
     
@@ -114,12 +117,6 @@ class Rocket {
  
  
     launch() {
-        // Check if the rocket can reach the required altitude
-        if (this.rocketShape.position.y <= 100) { // Assuming 100 is the required altitude
-            console.log('You win!');
-        } else {
-            console.log('You lose!');
-        }
 
         this.startAnimation();
     }
@@ -127,7 +124,7 @@ class Rocket {
  
  
  
-    loseWeight() {
+    loseWeight() { 
         this.fuelWeight -= this.weightLossConstant;
     }
  
@@ -138,15 +135,21 @@ class Rocket {
  
  
     calculateAcceleration() {
+        console.log('get new acc');
+
         if (this.fuelWeight >= 0) {
+            console.log('accel we calculate = ' + String((this.force + this.getGravityForce()) / (this.rocketWeight + this.fuelWeight)));
+
             return (this.force + this.getGravityForce()) / (this.rocketWeight + this.fuelWeight);
         } else {
-            return
+            console.log("OUT OF FUEL");
+            return this.getGravityForce() / (this.rocketWeight);
         }
     }
  
  
     getNewSpeed() {
+        console.log('before get speed, init speed = ' + String(this.speed));
         this.speed += this.calculateAcceleration();
     }
  }

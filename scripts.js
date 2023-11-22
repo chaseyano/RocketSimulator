@@ -9,7 +9,7 @@ canvasElement.height = window.innerHeight - 50; // leaving 50px gap at the botto
 // Example Usage:
 const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen');
 
-document.getElementById('startButton').addEventListener('click', () => {
+document.getElementById('launchButton').addEventListener('click', () => {
     myRocket.launch();
 });
 
