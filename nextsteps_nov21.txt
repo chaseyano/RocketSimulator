@@ -1,0 +1,8 @@
+1. create 4 animations
+    - launch (non-looped) animation that plays on pressing launch ubtton
+    - in flight (loopsed) which shows rocket flying in center of screen with clouds behind it (with YOU WIN over screen, and restart arrow)
+    - win, same as in flight, but clouds are stars, and blue sky is space
+    - lose, in flight but the motion of the clouds is reversed (with YOU LOSE over screen, and restart arrow)
+2. make sure that the canvas is displaying teh right animation based on where we toggle the animations.
+    - look at the places where this.isAnimating is set, these are where the animations will change
+3. tweaking hte values. thinking out the economy system.

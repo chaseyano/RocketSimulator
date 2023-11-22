@@ -1,11 +1,12 @@
 
 class Rocket {
+
+
     constructor(canvasId, material, fuelType) {
         this.canvas = document.getElementById(canvasId);
         this.direction = 1; // -1 for up, 1 for down
         this.isAnimating = false;
-            console.log(this.canvas);
- 
+
  
         paper.setup(this.canvas);
  
@@ -53,7 +54,7 @@ class Rocket {
         this.force = 0.0;
         this.fuelWeight = 0.0;
         if (fuelType === "hydrogen") {
-            this.force = 500000;
+            this.force = 50;
             this.fuelWeight = 50.0;
         } else if (fuelType === "kerosene") {
             this.force = 400000;
@@ -69,32 +70,30 @@ class Rocket {
             this.weightLossConstant = 5.5;
         }
         this.speed = 0.0;
+        this.distance = 0.0;
+    
     }
  
  
     animate() {
         console.log("animate() called");
+        this.checkIfEscaped();
+
         if (!this.isAnimating) {
             return;
         }
-        // Check if the rocket can reach the required altitude
-        if (this.rocketShape.position.y >= 1000) { // Assuming 100 is the required altitude
-            console.log('You win!');
-            this.isAnimating = false;
-            return;
-        }
-        
-        console.log("rocket shape position y -> " + String(this.rocketShape.position.y) );
+
+        console.log("rocket shape position y -> " + String(this.distance) );
         console.log("this.canvas.height - 150 -> " + String(this.canvas.height - 150 ));
 
         this.getNewSpeed();
         this.loseWeight();
-        if (this.rocketShape.position.y >= this.canvas.height - 150) {
+        if (this.distance >= 0) {
             console.log("position is above ground");
-            console.log("A rocket shape position y -> " + String(this.rocketShape.position.y) );
+            console.log("A rocket shape position y -> " + String(this.distance) );
             console.log("this speed = " + String(this.speed));
-            this.rocketShape.position.y += this.speed; // Move the rocket vertically
-            console.log("B rocket shape position y -> " + String(this.rocketShape.position.y) );
+            this.distance += this.speed; // Move the rocket vertically
+            console.log("B rocket shape position y -> " + String(this.distance) );
 
         }
         paper.view.update(); // Update the view
@@ -121,9 +120,7 @@ class Rocket {
         this.startAnimation();
     }
  
- 
- 
- 
+
     loseWeight() { 
         this.fuelWeight -= this.weightLossConstant;
     }
@@ -151,6 +148,27 @@ class Rocket {
     getNewSpeed() {
         console.log('before get speed, init speed = ' + String(this.speed));
         this.speed += this.calculateAcceleration();
+    }
+
+    escape() { // WIN!
+        // logic for rendering escape animation
+        this.isAnimating = false;
+        console.log("YOU WIN!")
+    }
+
+    fail(){
+        this.isAnimating = false;
+        console.log("YOU LOSE!")
+    }
+
+    checkIfEscaped() {
+        let ESCAPE_SPEED = 1000;
+        let ESCAPE_ALTITUDE = 1000;
+        if(this.distance >= ESCAPE_ALTITUDE && this.speed >= ESCAPE_SPEED) {
+            this.escape();
+        } else if (this.speed <= ESCAPE_SPEED && this.calculateAcceleration() <= 0){
+            this.fail();
+        }
     }
  }
 
