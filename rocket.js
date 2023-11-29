@@ -17,12 +17,6 @@ class Rocket {
 
         this.animationState = this.ANIMATION_STATES[0];
 
-        this.rocketShape = new paper.Path();
-        this.rocketShape.add(new paper.Point(this.canvas.width / 2, this.canvas.height - 150)); // Bottom point
-        this.rocketShape.lineTo(new paper.Point(this.canvas.width / 2 - 25, this.canvas.height - 100)); // Left point
-        this.rocketShape.lineTo(new paper.Point(this.canvas.width / 2 + 25, this.canvas.height - 100)); // Right point
-        this.rocketShape.closePath(); // Close the path to create the triangle
-        this.rocketShape.fillColor = 'green'; // Fill the path with color
         this.rocketWeight = 0.0;
         if (material === "titanium") {
             this.rocketWeight = 100.0;
