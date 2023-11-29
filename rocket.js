@@ -10,7 +10,8 @@ class Rocket {
  
         paper.setup(this.canvas);
  
- 
+        this.animationState = 'idle';
+
         this.rocketShape = new paper.Path();
         this.rocketShape.add(new paper.Point(this.canvas.width / 2, this.canvas.height - 150)); // Bottom point
         this.rocketShape.lineTo(new paper.Point(this.canvas.width / 2 - 25, this.canvas.height - 100)); // Left point
@@ -27,16 +28,31 @@ class Rocket {
         }
  
 
-        // Define the costs
-        this.costs = {
-            'titanium': 10000000, // $10 million
-            'aluminium': 5000000, // $5 million
-            'steel': 7500000, // $7.5 million
-            'hydrogen': 20000000, // $20 million
-            'kerosene': 10000000, // $10 million
-            'methane': 15000000, // $15 million
-        };
+        // Define the base costs
+this.baseCosts = {
+    'titanium': 10000000, // $10 million
+    'aluminium': 5000000, // $5 million
+    'steel': 7500000, // $7.5 million
+    'carbon': 8000000, // $8 million
+    'silica': 20000000, // $20 million
+    'hydrogen': 20000000, // $20 million
+    'kerosene': 10000000, // $10 million
+    'methane': 15000000, // $15 million
+    'helium3': 25000000, // $25 million
+    'rp-1': 50000000, // $50 million
+};
 
+// Define the current costs (initially the same as the base costs)
+this.costs = {...this.baseCosts};
+
+// Then, whenever a player purchases a material or fuel type, increase its cost:
+this.buy = function(item) {
+    // Deduct the cost from the budget
+    this.budget -= this.costs[item];
+
+    // Increase the cost for the next purchase
+    this.costs[item] *= 1.1; // Increase cost by 10%
+};
         // Initialize budget
         this.budget = 100000000; // $100 million
 
@@ -53,22 +69,28 @@ class Rocket {
  
         this.force = 0.0;
         this.fuelWeight = 0.0;
+
         if (fuelType === "hydrogen") {
             this.force = 50;
             this.fuelWeight = 50.0;
         } else if (fuelType === "kerosene") {
             this.force = 400000;
             this.fuelWeight = 60.0;
-        } else if (fuelType === "methane") {
-            this.force = 450000;
-            this.fuelWeight = 55.0;
+        } else if (fuelType === "hydrazine") {
+            this.force = 300000;
+            this.fuelWeight = 70.0;
         }
- 
- 
+
+      
         this.weightLossConstant = 0.0;
-        if ((fuelType === "hydrogen" && material === "titanium") || (fuelType === "kerosene" && material === "aluminium") || (fuelType === "methane" && material === "steel")) {
+        if ((fuelType === "hydrogen" && material === "titanium") || 
+            (fuelType === "kerosene" && material === "aluminium") || 
+            (fuelType === "hydrazine" && material === "steel") ||
+            (fuelType === "hydrogen" && material === "carbon_composites") ||
+            (fuelType === "kerosene" && material === "inconel")) {
             this.weightLossConstant = 5.5;
         }
+
         this.speed = 0.0;
         this.distance = 0.0;
     
@@ -83,6 +105,8 @@ class Rocket {
             return;
         }
 
+    
+        
         console.log("rocket shape position y -> " + String(this.distance) );
         console.log("this.canvas.height - 150 -> " + String(this.canvas.height - 150 ));
 
@@ -130,7 +154,7 @@ class Rocket {
         return -(this.rocketWeight + this.fuelWeight) * 9.8;
     }
  
- 
+
     calculateAcceleration() {
         console.log('get new acc');
 
@@ -170,6 +194,7 @@ class Rocket {
             this.fail();
         }
     }
+        
  }
 
  
