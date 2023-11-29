@@ -2,11 +2,12 @@
 class Rocket {
 
     ANIMATION_STATES = ['PRE-LAUNCH','IS-LAUNCHING', 'IN-FLIGHT', 'WIN', 'LOST']
-
+    ESCAPE_SPEED = 1000;
+    ESCAPE_ALTITUDE = 1000;
     constructor(canvasId, material, fuelType) {
         this.canvas = document.getElementById(canvasId);
         this.direction = 1; // -1 for up, 1 for down
-        this.isAnimating = false;
+        this.inFlight = false;
  
         paper.setup(this.canvas);
 
@@ -75,8 +76,8 @@ this.buy = function(item) {
         this.fuelWeight = 0.0;
 
         if (fuelType === "hydrogen") {
-            this.force = 50;
-            this.fuelWeight = 50.0;
+            this.force = 2500;  // Example force value
+            this.fuelWeight = 40.0; 
         } else if (fuelType === "kerosene") {
             this.force = 400000;
             this.fuelWeight = 60.0;
@@ -84,8 +85,6 @@ this.buy = function(item) {
             this.force = 300000;
             this.fuelWeight = 70.0;
         }
-
-      
         this.weightLossConstant = 0.0;
         if ((fuelType === "hydrogen" && material === "titanium") || 
             (fuelType === "kerosene" && material === "aluminium") || 
@@ -94,24 +93,20 @@ this.buy = function(item) {
             (fuelType === "kerosene" && material === "inconel")) {
             this.weightLossConstant = 5.5;
         }
-
         this.speed = 0.0;
         this.distance = 0.0;
-    
-
-
     }
  
 
  
     animate() {
-        console.log("animate() called");
-        this.checkIfEscaped();
-        this.setAnimation();
+        this.checkIfWon();
 
-        if (!this.isAnimating) {
+        if (!this.inFlight) {
+            console.log("NOT IN FLIGHT!");
             return;
         }
+
 
     
         
@@ -132,51 +127,48 @@ this.buy = function(item) {
         requestAnimationFrame(this.animate.bind(this)); // Bind 'this' to ensure correct context
     }
  
-    
- 
     startAnimation() {
-        if (!this.isAnimating) {
-            this.isAnimating = true;
+        if (!this.inFlight) {
+            this.inFlight = true;
             this.animate();
         }
     }
  
- 
-    stopAnimation() {
-        this.isAnimating = false;
+    stopSimulation() {
+        this.inFlight = false;
     }
 
-    setAnimation() {
-        if (this.animationState === "PRE-LAUNCH") {
-            this.setPreLaunch();
-        }
-    }
 
     setPreLaunch() {
-        this.animationState = this.ANIMATION_STATES[0];
         this.statusText.content = 'PRE LAUNCH';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
     }
 
     setIsLaunching() {
-        this.animationState = this.ANIMATION_STATES[1];
-
         this.statusText.content = 'IS LAUNCHING';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
     }
 
     setInFlight() {
-        this.animationState = this.ANIMATION_STATES[2];
-
         this.statusText.content = 'IN FLIGHT';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
     }
+
+    setWin() {
+        this.statusText.content = 'WIN';
+        this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
+    }
  
+    setLoss() {
+        this.statusText.content = 'LOSS';
+        this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
+    }
+
     launch() {
         this.setIsLaunching();
         setTimeout(() => {
             this.isLaunchingCallback();
-        }, 1000);
+        }, 1);
         this.startAnimation();
     }
  
@@ -192,67 +184,33 @@ this.buy = function(item) {
     getGravityForce() {
         return -(this.rocketWeight + this.fuelWeight) * 9.8;
     }
- 
 
     calculateAcceleration() {
         console.log('get new acc');
 
         if (this.fuelWeight >= 0) {
             console.log('accel we calculate = ' + String((this.force + this.getGravityForce()) / (this.rocketWeight + this.fuelWeight)));
-
             return (this.force + this.getGravityForce()) / (this.rocketWeight + this.fuelWeight);
         } else {
-            console.log("OUT OF FUEL");
             return this.getGravityForce() / (this.rocketWeight);
         }
     }
- 
  
     getNewSpeed() {
         console.log('before get speed, init speed = ' + String(this.speed));
         this.speed += this.calculateAcceleration();
     }
 
-    escape() { // WIN!
-        // logic for rendering escape animation
-        this.isAnimating = false;
-        console.log("YOU WIN!")
-    }
-
-    fail(){
-        this.isAnimating = false;
-        console.log("YOU LOSE!")
-    }
-
-    checkIfEscaped() {
-        let ESCAPE_SPEED = 1000;
-        let ESCAPE_ALTITUDE = 1000;
-        if(this.distance >= ESCAPE_ALTITUDE && this.speed >= ESCAPE_SPEED) {
-            this.escape();
-        } else if (this.speed <= ESCAPE_SPEED && this.calculateAcceleration() <= 0){
-            this.fail();
+    checkIfWon() {
+        if(this.distance >= this.ESCAPE_ALTITUDE && this.speed >= this.ESCAPE_SPEED) {
+            this.setWin();
+            this.stopSimulation();
+        } else if (this.speed <= this.ESCAPE_SPEED && this.calculateAcceleration() <= 0){
+            this.setLoss();
+            this.stopSimulation();
         }
     }
 
-    // Pre-launch (loop, maybe clouds flying by):
-        // When the player is still choosing their object
-
-    // Is-launching (1 sec fixed animation):
-        // 1 second fixed animation
-        // make sure that no matter whta parameters are set, the user can make it to the 
-        // next animation (in-flight) BEFORE FAILING
-
-    // In-flight (loop)
-        // not LOSS and not WIN
-
-    // Loss (loop with a restart button)
-        // acceleration is negative is 0
-        // speed < escape_speed AND
-        // distance < escape_distance
-
-    // Win (loop with restart button)
-        // speed >= escape_speed AND distance >= escape_disance
-        // acceleration >= 0
  }
 
  
