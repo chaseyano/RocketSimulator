@@ -26,20 +26,23 @@ class Rocket {
             this.rocketWeight = 150.0;
         }
  
+        this.speedText = new paper.PointText(new paper.Point(20, 20));
+        this.speedText.content = 'Speed: 0';
+        this.speedText.fillColor = 'black';
 
-        // Define the base costs
-this.baseCosts = {
-    'titanium': 10000000, // $10 million
-    'aluminium': 5000000, // $5 million
-    'steel': 7500000, // $7.5 million
-    'carbon': 8000000, // $8 million
-    'silica': 20000000, // $20 million
-    'hydrogen': 20000000, // $20 million
-    'kerosene': 10000000, // $10 million
-    'methane': 15000000, // $15 million
-    'helium3': 25000000, // $25 million
-    'rp-1': 50000000, // $50 million
-};
+      // Define the base costs (in dollars per kg)
+      this.baseCosts = {
+        'titanium': 5.50,
+        'aluminium': 2.17,
+        'steel': 0.548,
+        'carbon': 21.5, // Lower end of the range
+        'silica': 2.17,
+        'hydrogen': 1.35, // Lower end of the range
+        'kerosene': 0.73,
+        'methane': 0.22,
+        'helium3': 2750, // Price per liter
+        'rp-1': 2.3,
+    };
 
 // Define the current costs (initially the same as the base costs)
 this.costs = {...this.baseCosts};
@@ -52,18 +55,19 @@ this.buy = function(item) {
     // Increase the cost for the next purchase
     this.costs[item] *= 1.1; // Increase cost by 10%
 };
-        // Initialize budget
-        this.budget = 100000000; // $100 million
+          // Initialize budget
+          this.budget = 100000000; // $100 million
 
-        // Deduct the cost of the selected material and fuel type from the budget
-        this.budget -= this.costs[material];
-        this.budget -= this.costs[fuelType];
-
-        // Check if the budget has been exceeded
-        if (this.budget < 0) {
-            console.log('Budget exceeded!');
-            return;
-        }
+          // Deduct the cost of the selected material and fuel type from the budget
+          // Assume 1000 kg of each material and fuel type for simplicity
+          this.budget -= this.costs[material] * 1000;
+          this.budget -= this.costs[fuelType] * 1000;
+  
+          // Check if the budget has been exceeded
+          if (this.budget < 0) {
+              console.log('Budget exceeded!');
+              return;
+          }
 
  
         this.force = 0.0;
@@ -99,6 +103,7 @@ this.buy = function(item) {
         if (!this.inFlight) {
             console.log("NOT IN FLIGHT!");
             return;
+            paper.view.update(); // Update the view
         }
 
 
@@ -193,6 +198,8 @@ this.buy = function(item) {
     getNewSpeed() {
         console.log('before get speed, init speed = ' + String(this.speed));
         this.speed += this.calculateAcceleration();
+        this.speed += this.calculateAcceleration();
+    this.speedText.content = 'Speed: ' + Math.round(this.speed);
     }
 
     checkIfWon() {
