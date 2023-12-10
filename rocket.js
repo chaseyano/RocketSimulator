@@ -1,6 +1,7 @@
 
 class Rocket {
 
+    // m /s, m, N, m/s^2
     ANIMATION_STATES = ['PRE-LAUNCH','IS-LAUNCHING', 'IN-FLIGHT', 'WIN', 'LOST']
     ESCAPE_SPEED = 11200;
     ESCAPE_ALTITUDE = 160;
@@ -30,6 +31,9 @@ class Rocket {
         this.speedText = new paper.PointText(new paper.Point(20, 20));
         this.speedText.content = 'Speed: 0';
         this.speedText.fillColor = 'black';
+
+        this.isLaunchingAnimationPlaying = false;  // Flag for tracking isLaunching animation
+
 
       // Define the base costs (in dollars per kg)
       this.baseCosts = {
@@ -75,7 +79,7 @@ this.buy = function(item) {
         this.fuelWeight = 0.0;
 
         if (fuelType === "hydrogen") {
-            this.force = 100 * this.SCALE;  // Example force value
+            this.force = 50 * this.SCALE;  // Example force value
             this.fuelWeight = 1.0 * this.SCALE; 
         } else if (fuelType === "kerosene") {
             this.force = 400000;
@@ -155,14 +159,25 @@ this.buy = function(item) {
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.drawRectangle('blue'); // Blue rectangle for 'PRE LAUNCH'
     }
-
     setIsLaunching() {
         this.statusText.content = 'IS LAUNCHING';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.drawRectangle('orange'); // Orange rectangle for 'IS LAUNCHING'
+        this.isLaunchingAnimationPlaying = true;
+
+        // Set a timeout to transition to inFlight after 1 second
+        setTimeout(() => {
+            if (this.isLaunchingAnimationPlaying) {
+                this.setInFlight();
+            }
+        }, 1000); // 1 second delay
     }
 
     setInFlight() {
+        if (!this.isLaunchingAnimationPlaying) {
+            return; // Do not transition to inFlight if isLaunching animation is not playing
+        }
+        this.isLaunchingAnimationPlaying = false;
         this.statusText.content = 'IN FLIGHT';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.drawRectangle('lightblue'); // Light blue rectangle for 'IN FLIGHT'
@@ -183,11 +198,12 @@ this.buy = function(item) {
         this.setIsLaunching();
         setTimeout(() => {
             this.isLaunchingCallback();
-        }, 1);
+        }, 1000); // Delay the isLaunchingCallback by 1 second (1000 milliseconds)
         this.startAnimation();
     }
- 
+    
     isLaunchingCallback() {
+        // Now this will be called after 1 second due to the change in launch()
         this.setInFlight();
     }
 
@@ -219,15 +235,19 @@ this.buy = function(item) {
     }
 
     checkIfWon() {
-        if(this.distance >= this.ESCAPE_ALTITUDE && this.speed >= this.ESCAPE_SPEED) {
+        if (this.isLaunchingAnimationPlaying) {
+            setTimeout(() => this.checkIfWon(), 100); // Check again after a short delay
+            return;
+        }
+
+        if (this.distance >= this.ESCAPE_ALTITUDE && this.speed >= this.ESCAPE_SPEED) {
             this.setWin();
             this.stopSimulation();
-        } else if (this.speed <= this.ESCAPE_SPEED && this.calculateAcceleration() <= 0){
+        } else if (this.speed <= this.ESCAPE_SPEED && this.calculateAcceleration() <= 0) {
             this.setLoss();
             this.stopSimulation();
         }
     }
-
  }
 
  
