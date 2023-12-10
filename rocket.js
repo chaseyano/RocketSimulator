@@ -2,8 +2,9 @@
 class Rocket {
 
     ANIMATION_STATES = ['PRE-LAUNCH','IS-LAUNCHING', 'IN-FLIGHT', 'WIN', 'LOST']
-    ESCAPE_SPEED = 1000;
-    ESCAPE_ALTITUDE = 1000;
+    ESCAPE_SPEED = 11200;
+    ESCAPE_ALTITUDE = 160;
+    SCALE = 1000000;
     constructor(canvasId, material, fuelType) {
         this.canvas = document.getElementById(canvasId);
         this.direction = 1; // -1 for up, 1 for down
@@ -19,7 +20,7 @@ class Rocket {
 
         this.rocketWeight = 0.0;
         if (material === "titanium") {
-            this.rocketWeight = 100.0;
+            this.rocketWeight = 0.6 * this.SCALE;
         } else if (material === "aluminium") {
             this.rocketWeight = 50.0;
         } else if (material === "steel") {
@@ -74,8 +75,8 @@ this.buy = function(item) {
         this.fuelWeight = 0.0;
 
         if (fuelType === "hydrogen") {
-            this.force = 2500;  // Example force value
-            this.fuelWeight = 40.0; 
+            this.force = 100 * this.SCALE;  // Example force value
+            this.fuelWeight = 1.0 * this.SCALE; 
         } else if (fuelType === "kerosene") {
             this.force = 400000;
             this.fuelWeight = 60.0;
@@ -89,7 +90,7 @@ this.buy = function(item) {
             (fuelType === "hydrazine" && material === "steel") ||
             (fuelType === "hydrogen" && material === "carbon_composites") ||
             (fuelType === "kerosene" && material === "inconel")) {
-            this.weightLossConstant = 5.5;
+            this.weightLossConstant = 6500;
         }
         this.speed = 0.0;
         this.distance = 0.0;
@@ -145,7 +146,6 @@ this.buy = function(item) {
 
     stopSimulation() {
         this.inFlight = false;
-        this.statusText.content = 'STOPPED';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.drawRectangle('grey'); // Grey rectangle for 'STOPPED'
     }
