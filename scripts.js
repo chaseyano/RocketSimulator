@@ -16,3 +16,7 @@ document.getElementById('launchButton').addEventListener('click', () => {
 document.getElementById('endButton').addEventListener('click', () => {
     myRocket.stopAnimation();
 });
+
+document.getElementById('resetButton').addEventListener('click', () => {
+    myRocket.reset();
+});

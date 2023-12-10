@@ -7,6 +7,8 @@ class Rocket {
     ESCAPE_ALTITUDE = 160;
     SCALE = 1000000;
     constructor(canvasId, material, fuelType) {
+        this.animationFrameId = null; // Property to store the animation frame request ID
+
         this.canvas = document.getElementById(canvasId);
         this.direction = 1; // -1 for up, 1 for down
         this.inFlight = false;
@@ -127,8 +129,13 @@ this.buy = function(item) {
             console.log("B rocket shape position y -> " + String(this.distance) );
 
         }
-        paper.view.update(); // Update the view
-        requestAnimationFrame(this.animate.bind(this)); // Bind 'this' to ensure correct context
+        this.animationFrameId = requestAnimationFrame(this.animate.bind(this)); // Store the request ID
+
+        paper.view.update(); // Update the view'
+
+        // requestAnimationFrame(this.animate.bind(this)); // Bind 'this' to ensure correct context
+
+
     }
  
     startAnimation() {
@@ -248,6 +255,28 @@ this.buy = function(item) {
             this.stopSimulation();
         }
     }
+    reset() {
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId); // Cancel the ongoing animation frame
+        }
+
+        // Reset internal values
+        this.direction = 1;
+        this.inFlight = false;
+        this.animationState = this.ANIMATION_STATES[0];
+        this.rocketWeight = 0.0;
+        this.isLaunchingAnimationPlaying = false;
+        this.distance = 0;
+        this.speed = 0;
+        this.fuelWeight = 1.0 * this.SCALE;  // Reset based on material
+
+        // Reset UI elements
+        this.speedText.content = 'Speed: 0';
+        this.statusText.content = 'Pre-launch';
+
+        this.animationFrameId = null; // Reset the animation frame ID
+    }
+
  }
 
  

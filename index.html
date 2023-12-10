@@ -1,39 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Basic Paper.js Example</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.14/paper-full.min.js"></script>
-</head>
-<body>
-<canvas id="myCanvas" resize></canvas>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Basic Paper.js Example</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.14/paper-full.min.js"></script>
+        <style>
+            body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+    
+            #myCanvas {
+                height: 80vh; /* 80% of the viewport height */
+            }
+    
+            #controlPanel {
+                height: 20vh; /* Remaining 20% of the viewport height */
+                border-top: 1px solid #000;
+                overflow: auto; /* Add scrolling if the content overflows */
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="myCanvas" resize></canvas>
 
+        <div id="controlPanel">
+            <div id="selectsContainer">
+                <div id="materialContainer">
+                    <label for="material">Material:</label>
+                    <select id="material">
+                        <option value="titanium">Titanium</option>
+                        <option value="aluminium">Aluminium</option>
+                        <option value="steel">Steel</option>
+                        <option value="carbon">Carbon</option>
+                        <option value="silica">Silica</option>
+                    </select>
+                </div>
+                
+                <div id="fuelTypeContainer">
+                    <label for="fuelType">Fuel Type:</label>
+                    <select id="fuelType">
+                        <option value="hydrogen">Hydrogen</option>
+                        <option value="kerosene">Kerosene</option>
+                        <option value="methane">Methane</option>
+                        <option value="helium3">Helium-3</option>
+                        <option value="rp-1">RP-1</option>
+                    </select>
+                </div>
+            </div>
+            
+            <hr class="vertical-line"> <!-- Vertical line -->
+            
+            <div id="buttonsContainer">
+                <button id="launchButton">Launch</button>
+                <button id="endButton">End Animation</button>
+                <button id="resetButton">Reset</button>
 
-<select id="material">
-    <option value="titanium">Titanium</option>
-    <option value="aluminium">Aluminium</option>
-    <option value="steel">Steel</option>
-    <option value="carbon">Carbon</option>
-    <option value="silica">Silica</option>
-</select>
+            </div>
+        </div>
 
+        <script src="scripts.js" type="module"></script>
+    </body>
 
-<select id="fuelType">
-    <option value="hydrogen">Hydrogen</option>
-    <option value="kerosene">Kerosene</option>
-    <option value="methane">Methane</option>
-    <option value="helium3">Helium-3</option>
-    <option value="rp-1">RP-1</option>
-</select>
-
-
-<button id="launchButton">Launch</button>
-
-
-<button id="endButton">End Animation</button>
-
-
-<script src="scripts.js" type="module"></script>
-</body>
+    <style>
+        /* Your existing styles here */
+    
+        #controlPanel {
+            display: flex;
+            align-items: center;
+        }
+    
+        #selectsContainer {
+            display: flex;
+            align-items: center;
+        }
+    
+        #selectsContainer > div {
+            margin-right: 10px; /* Adjust the spacing between the selects */
+        }
+    
+        hr.vertical-line {
+            border-left: 1px solid #000;
+            height: 100%;
+            margin: 0 10px; /* Adjust the spacing between the line and the selects/buttons */
+        }
+    </style>
+    
 </html>
