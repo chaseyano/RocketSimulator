@@ -133,36 +133,52 @@ this.buy = function(item) {
         }
     }
  
-    stopSimulation() {
-        this.inFlight = false;
+    drawRectangle(color) {
+        // Assuming 'paper' is your drawing library and you have a 'canvas' defined
+        let rect = new paper.Path.Rectangle({
+            point: [this.canvas.width / 2 - 50, this.canvas.height / 2 - 25],
+            size: [100, 50],
+            fillColor: color
+        });
+        rect.position = new paper.Point(this.canvas.width / 2, this.canvas.height / 2);
     }
 
+    stopSimulation() {
+        this.inFlight = false;
+        this.statusText.content = 'STOPPED';
+        this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
+        this.drawRectangle('grey'); // Grey rectangle for 'STOPPED'
+    }
 
     setPreLaunch() {
         this.statusText.content = 'PRE LAUNCH';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
+        this.drawRectangle('blue'); // Blue rectangle for 'PRE LAUNCH'
     }
 
     setIsLaunching() {
         this.statusText.content = 'IS LAUNCHING';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
+        this.drawRectangle('orange'); // Orange rectangle for 'IS LAUNCHING'
     }
 
     setInFlight() {
         this.statusText.content = 'IN FLIGHT';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
+        this.drawRectangle('lightblue'); // Light blue rectangle for 'IN FLIGHT'
     }
 
     setWin() {
         this.statusText.content = 'WIN';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
+        this.drawRectangle('gold'); // Gold rectangle for 'WIN'
     }
- 
+
     setLoss() {
         this.statusText.content = 'LOSS';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
+        this.drawRectangle('red'); // Red rectangle for 'LOSS'
     }
-
     launch() {
         this.setIsLaunching();
         setTimeout(() => {
