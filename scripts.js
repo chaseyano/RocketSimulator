@@ -6,15 +6,21 @@ canvasElement.width = window.innerWidth;
 canvasElement.height = window.innerHeight - 50; // leaving 50px gap at the bottom for UI elements
 
 
-// Example Usage:
-var myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen');
+const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen'); // this is just to clear the screen.
 
 document.getElementById('launchButton').addEventListener('click', () => {
+    // Get a reference to the select element
+    const materialSelect = document.getElementById('material');
+    const fuelSelect = document.getElementById('fuelType');
 
+    // Get the selected value
+    const material = materialSelect.value;
+    const fuel = fuelSelect.value;
+    const myRocket = new Rocket('myCanvas', material, fuel); 
     myRocket.launch();
 });
 
 document.getElementById('resetButton').addEventListener('click', () => {
-        myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen');
-
+    const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen'); // this is just to clear the screen.
+    // won't get launched
 });

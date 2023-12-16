@@ -35,6 +35,14 @@ class Rocket {
         this.speedText.content = 'Speed: 0';
         this.speedText.fillColor = 'black';
 
+        this.materialText = new paper.PointText(new paper.Point(20, 30));
+        this.materialText.content = 'Material: ' + material;
+        this.materialText.fillColor = 'black';
+
+        this.fuelText = new paper.PointText(new paper.Point(20, 40));
+        this.fuelText.content = 'Fuel: ' + fuelType;
+        this.fuelText.fillColor = 'black';
+
         this.isLaunchingAnimationPlaying = false;  // Flag for tracking isLaunching animation
 
 
@@ -121,6 +129,7 @@ this.buy = function(item) {
         console.log("this.canvas.height - 150 -> " + String(this.canvas.height - 150 ));
 
         this.getNewSpeed();
+
         this.loseWeight();
         if (this.distance >= 0) {
             console.log("position is above ground");
@@ -244,7 +253,7 @@ this.buy = function(item) {
         console.log('before get speed, init speed = ' + String(this.speed));
         this.speed += this.calculateAcceleration();
         this.speed += this.calculateAcceleration();
-    this.speedText.content = 'Speed: ' + Math.round(this.speed);
+        this.speedText.content = 'Speed: ' + Math.round(this.speed);
     }
 
     checkIfWon() {
