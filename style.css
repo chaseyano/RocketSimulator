@@ -1,0 +1,55 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+#myCanvas {
+    height: 80vh;
+}
+
+#controlPanel {
+    height: 20vh;
+    border-top: 1px solid #000;
+    overflow: auto;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+
+#selectsContainer {
+    display: flex;
+    align-items: center;
+}
+
+#selectsContainer > div {
+    margin-right: 10px;
+}
+
+#selectsContainer label {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+#buttonsContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 30%;
+}
+
+#buttonsContainer button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+#buttonsContainer button:hover {
+    background-color: #45a049;
+}
+

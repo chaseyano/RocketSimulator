@@ -5,11 +5,9 @@ var canvasElement = document.getElementById('myCanvas');
 canvasElement.width = window.innerWidth;
 canvasElement.height = window.innerHeight - 50; // leaving 50px gap at the bottom for UI elements
 
-
-// Example Usage:
-const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen');
-
 document.getElementById('launchButton').addEventListener('click', () => {
+    const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen');
+
     myRocket.launch();
 });
 
