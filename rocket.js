@@ -7,14 +7,32 @@ class Rocket {
     ESCAPE_ALTITUDE = 160;
     SCALE = 1000000;
     constructor(canvasId, material, fuelType) {
+
+
+
+
         this.animationFrameId = null; // Property to store the animation frame request ID
 
         this.canvas = document.getElementById(canvasId);
+        this.context = this.canvas.getContext('2d'); // Initialize the context
+
         this.direction = 1; // -1 for up, 1 for down
         this.inFlight = false;
         this.hasLaunched = false;
  
+
+
         paper.setup(this.canvas);
+
+        // Draw a blue rectangle with Paper.js
+        var background = new paper.Path.Rectangle({
+            point: [0, 0],
+            size: [this.canvas.width, this.canvas.height],
+            fillColor: 'blue'
+        });
+        // Canvas stuff
+        this.context.fillStyle = 'blue';
+        this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.statusText = new paper.PointText(new paper.Point(this.canvas.width / 2, this.canvas.height - 150));
         this.statusText.content = 'Pre-launch';
