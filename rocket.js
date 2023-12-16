@@ -204,6 +204,8 @@ this.buy = function(item) {
     }
     launch() {
         if (!this.hasLaunched) {
+            const launchButton = document.getElementById('launchButton');
+            launchButton.style.backgroundColor = 'gray';
             this.hasLaunched = true;
             this.setIsLaunching();
             setTimeout(() => {

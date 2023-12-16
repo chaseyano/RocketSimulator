@@ -14,10 +14,7 @@ document.getElementById('launchButton').addEventListener('click', () => {
     myRocket.launch();
 });
 
-document.getElementById('endButton').addEventListener('click', () => {
-    myRocket.stopAnimation();
-});
-
 document.getElementById('resetButton').addEventListener('click', () => {
-    myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen');
+        myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen');
+
 });
