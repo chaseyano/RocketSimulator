@@ -12,6 +12,7 @@ class Rocket {
         this.canvas = document.getElementById(canvasId);
         this.direction = 1; // -1 for up, 1 for down
         this.inFlight = false;
+        this.hasLaunched = false;
  
         paper.setup(this.canvas);
 
@@ -202,11 +203,14 @@ this.buy = function(item) {
         this.drawRectangle('red'); // Red rectangle for 'LOSS'
     }
     launch() {
-        this.setIsLaunching();
-        setTimeout(() => {
-            this.isLaunchingCallback();
-        }, 1000); // Delay the isLaunchingCallback by 1 second (1000 milliseconds)
-        this.startAnimation();
+        if (!this.hasLaunched) {
+            this.hasLaunched = true;
+            this.setIsLaunching();
+            setTimeout(() => {
+                this.isLaunchingCallback();
+            }, 1000); // Delay the isLaunchingCallback by 1 second (1000 milliseconds)
+            this.startAnimation();
+        }
     }
     
     isLaunchingCallback() {
@@ -254,27 +258,6 @@ this.buy = function(item) {
             this.setLoss();
             this.stopSimulation();
         }
-    }
-    reset() {
-        if (this.animationFrameId) {
-            cancelAnimationFrame(this.animationFrameId); // Cancel the ongoing animation frame
-        }
-
-        // Reset internal values
-        this.direction = 1;
-        this.inFlight = false;
-        this.animationState = this.ANIMATION_STATES[0];
-        this.rocketWeight = 0.0;
-        this.isLaunchingAnimationPlaying = false;
-        this.distance = 0;
-        this.speed = 0;
-        this.fuelWeight = 1.0 * this.SCALE;  // Reset based on material
-
-        // Reset UI elements
-        this.speedText.content = 'Speed: 0';
-        this.statusText.content = 'Pre-launch';
-
-        this.animationFrameId = null; // Reset the animation frame ID
     }
 
  }
