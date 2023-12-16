@@ -1,4 +1,4 @@
-
+// import stopwatch from 'node-stopwatch';
 class Rocket {
 
     // m /s, m, N, m/s^2
@@ -7,10 +7,7 @@ class Rocket {
     ESCAPE_ALTITUDE = 160;
     SCALE = 1000000;
     constructor(canvasId, material, fuelType) {
-
-
-
-
+        // this.watch = stopwatch.create();
         this.animationFrameId = null; // Property to store the animation frame request ID
 
         this.canvas = document.getElementById(canvasId);
@@ -52,6 +49,10 @@ class Rocket {
         this.speedText = new paper.PointText(new paper.Point(20, 20));
         this.speedText.content = 'Speed: 0';
         this.speedText.fillColor = 'black';
+
+        // this.stopwatchText = new paper.PointText(new paper.Point(20, 50));
+        // this.stopwatchText.content = 'Elapsed: 0';
+        // this.stopwatchText.fillColor = 'black';
 
         this.materialText = new paper.PointText(new paper.Point(20, 30));
         this.materialText.content = 'Material: ' + material;
@@ -140,13 +141,9 @@ this.buy = function(item) {
             paper.view.update(); // Update the view
         }
 
+        this.updateSpeedLabel();
+        // this.updateStopwatchLabel();
 
-    
-        
-        console.log("rocket shape position y -> " + String(this.distance) );
-        console.log("this.canvas.height - 150 -> " + String(this.canvas.height - 150 ));
-
-        this.getNewSpeed();
 
         this.loseWeight();
         if (this.distance >= 0) {
@@ -159,11 +156,7 @@ this.buy = function(item) {
         }
         this.animationFrameId = requestAnimationFrame(this.animate.bind(this)); // Store the request ID
 
-        paper.view.update(); // Update the view'
-
-        // requestAnimationFrame(this.animate.bind(this)); // Bind 'this' to ensure correct context
-
-
+        paper.view.update(); 
     }
  
     startAnimation() {
@@ -184,6 +177,7 @@ this.buy = function(item) {
     }
 
     stopSimulation() {
+        // this.watch.stop();
         this.inFlight = false;
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.drawRectangle('grey'); // Grey rectangle for 'STOPPED'
@@ -231,6 +225,7 @@ this.buy = function(item) {
     }
     launch() {
         if (!this.hasLaunched) {
+            // this.watch.start();
             const launchButton = document.getElementById('launchButton');
             launchButton.style.backgroundColor = 'gray';
             this.hasLaunched = true;
@@ -267,12 +262,16 @@ this.buy = function(item) {
         }
     }
  
-    getNewSpeed() {
+    updateSpeedLabel() {
         console.log('before get speed, init speed = ' + String(this.speed));
         this.speed += this.calculateAcceleration();
         this.speed += this.calculateAcceleration();
         this.speedText.content = 'Speed: ' + Math.round(this.speed);
     }
+
+    // updateStopwatchLabel() {
+    //     this.stopwatchText.content = 'Elapsed: ' + this.watch.elapsedMilliseconds;
+    // }
 
     checkIfWon() {
         if (this.isLaunchingAnimationPlaying) {
