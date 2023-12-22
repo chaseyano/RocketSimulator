@@ -11,12 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen'); // this is just to clear the screen.
 
     document.getElementById('launchButton').addEventListener('click', () => {
-        const materialSelect = document.getElementById('material');
-        const fuelSelect = document.getElementById('fuelType');
-        const material = materialSelect.value;
-        const fuel = fuelSelect.value;
-        const myRocket = new Rocket('myCanvas', material, fuel); 
-        myRocket.launch();
+        if (getUpdatedBudget() >= 0 && areAllSelected()) {
+            const materialSelect = document.getElementById('material');
+            const fuelSelect = document.getElementById('fuelType');
+            const material = materialSelect.value;
+            const fuel = fuelSelect.value;
+            const myRocket = new Rocket('myCanvas', material, fuel); 
+            myRocket.launch();
+        } else {console.log("Can't have negative budget, and must select a fuel and material.")}
     });
 
     document.getElementById('resetButton').addEventListener('click', () => {
@@ -51,16 +53,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-
-    function updateBudgetDisplay() {
+    function getUpdatedBudget() {
         let selectedMaterial = materialSelect.value;
         let selectedFuel = fuelSelect.value;
-
         let totalCost = 0;
         totalCost += selectedMaterial !== 'none' ? materialPrices[selectedMaterial] : 0;
         totalCost += selectedFuel !== 'none' ? fuelPrices[selectedFuel] : 0;
 
         let updatedBudget = budget - totalCost;
+        return updatedBudget;
+    }
+
+    function areAllSelected() {
+        let selectedMaterial = materialSelect.value;
+        let selectedFuel = fuelSelect.value;
+        return selectedMaterial !== 'none' && selectedFuel !== 'none';
+    }
+
+    function updateBudgetDisplay() {
+        let updatedBudget = getUpdatedBudget();
         budgetDisplay.textContent = updatedBudget.toString();
     }
 });

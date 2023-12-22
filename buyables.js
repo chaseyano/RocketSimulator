@@ -9,7 +9,7 @@ export const materialPrices = {
 };
 
 export const fuelPrices = {
-    hydrogen: 100,
+    hydrogen: 1200,
     kerosene: 100,
     methane: 100,
     helium3: 100,
