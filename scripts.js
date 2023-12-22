@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fuel = fuelSelect.value;
             const myRocket = new Rocket('myCanvas', material, fuel); 
             myRocket.launch();
-        } else {console.log("Can't have negative budget, and must select a fuel and material.")}
+        } else {showModal("Negative budget or not all selected.")}
     });
 
     document.getElementById('resetButton').addEventListener('click', () => {
@@ -74,4 +74,27 @@ document.addEventListener('DOMContentLoaded', () => {
         let updatedBudget = getUpdatedBudget();
         budgetDisplay.textContent = updatedBudget.toString();
     }
+
+    // Function to show the modal
+function showModal(message) {
+    let modal = document.getElementById("myModal");
+    let span = document.getElementsByClassName("close")[0];
+    let modalText = document.getElementById("modalText");
+
+    modalText.textContent = message;
+    modal.style.display = "block";
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+}
+
 });
