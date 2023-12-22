@@ -1,4 +1,6 @@
 import Rocket from "./rocket.js";
+import { materialPrices, fuelPrices } from './buyables.js';
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // This code will run once the DOM is fully loaded
@@ -21,4 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen'); // this is just to clear the screen.
         // won't get launched
     });
+
+    populateDropdown('material', materialPrices);
+    populateDropdown('fuelType', fuelPrices);
+
+    function populateDropdown(dropdownId, prices) {
+        const select = document.getElementById(dropdownId);
+        for (const [key, value] of Object.entries(prices)) {
+            let option = document.createElement('option');
+            option.value = key;
+            option.text = `${capitalizeFirstLetter(key)} - $${value}`;
+            select.appendChild(option);
+        }
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
 });

@@ -13,26 +13,21 @@
         <canvas id="myCanvas" resize></canvas>
 
         <div id="controlPanel">
+            <div>
+                <h3>Money: 100</h3>
+            </div>
             <div id="selectsContainer">
                 <div id="materialContainer">
                     <label for="material">Material:</label>
                     <select id="material">
-                        <option value="titanium">Titanium</option>
-                        <option value="aluminium">Aluminium</option>
-                        <option value="steel">Steel</option>
-                        <option value="carbon">Carbon</option>
-                        <option value="silica">Silica</option>
+                        <option value="none">Select</option>
                     </select>
                 </div>
                 
                 <div id="fuelTypeContainer">
                     <label for="fuelType">Fuel Type:</label>
                     <select id="fuelType">
-                        <option value="hydrogen">Hydrogen</option>
-                        <option value="kerosene">Kerosene</option>
-                        <option value="methane">Methane</option>
-                        <option value="helium3">Helium-3</option>
-                        <option value="rp-1">RP-1</option>
+                        <option value="none">Select</option>
                     </select>
                 </div>
             </div>
@@ -48,29 +43,5 @@
 
         <script src="scripts.js" type="module"></script>
     </body>
-
-    <style>
-        /* Your existing styles here */
-    
-        #controlPanel {
-            display: flex;
-            align-items: center;
-        }
-    
-        #selectsContainer {
-            display: flex;
-            align-items: center;
-        }
-    
-        #selectsContainer > div {
-            margin-right: 10px; /* Adjust the spacing between the selects */
-        }
-    
-        hr.vertical-line {
-            border-left: 1px solid #000;
-            height: 100%;
-            margin: 0 10px; /* Adjust the spacing between the line and the selects/buttons */
-        }
-    </style>
     
 </html>
