@@ -1,4 +1,4 @@
-// import stopwatch from 'node-stopwatch';
+import Stopwatch from "./stopwatch.js";
 class Rocket {
 
     // m /s, m, N, m/s^2
@@ -7,7 +7,7 @@ class Rocket {
     ESCAPE_ALTITUDE = 160;
     SCALE = 1000000;
     constructor(canvasId, material, fuelType) {
-        // this.watch = stopwatch.create();
+        this.watch = new Stopwatch();
         this.animationFrameId = null; // Property to store the animation frame request ID
 
         this.canvas = document.getElementById(canvasId);
@@ -50,9 +50,9 @@ class Rocket {
         this.speedText.content = 'Speed: 0';
         this.speedText.fillColor = 'black';
 
-        // this.stopwatchText = new paper.PointText(new paper.Point(20, 50));
-        // this.stopwatchText.content = 'Elapsed: 0';
-        // this.stopwatchText.fillColor = 'black';
+        this.stopwatchText = new paper.PointText(new paper.Point(20, 50));
+        this.stopwatchText.content = 'Elapsed: 0';
+        this.stopwatchText.fillColor = 'black';
 
         this.materialText = new paper.PointText(new paper.Point(20, 30));
         this.materialText.content = 'Material: ' + material;
@@ -142,7 +142,7 @@ this.buy = function(item) {
         }
 
         this.updateSpeedLabel();
-        // this.updateStopwatchLabel();
+        this.updateStopwatchLabel();
 
 
         this.loseWeight();
@@ -177,7 +177,7 @@ this.buy = function(item) {
     }
 
     stopSimulation() {
-        // this.watch.stop();
+        this.watch.stop();
         this.inFlight = false;
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.drawRectangle('grey'); // Grey rectangle for 'STOPPED'
@@ -225,7 +225,7 @@ this.buy = function(item) {
     }
     launch() {
         if (!this.hasLaunched) {
-            // this.watch.start();
+            this.watch.start();
             const launchButton = document.getElementById('launchButton');
             launchButton.style.backgroundColor = 'gray';
             this.hasLaunched = true;
@@ -269,9 +269,9 @@ this.buy = function(item) {
         this.speedText.content = 'Speed: ' + Math.round(this.speed);
     }
 
-    // updateStopwatchLabel() {
-    //     this.stopwatchText.content = 'Elapsed: ' + this.watch.elapsedMilliseconds;
-    // }
+    updateStopwatchLabel() {
+        this.stopwatchText.content = 'Elapsed: ' + this.watch.time;
+    }
 
     checkIfWon() {
         if (this.isLaunchingAnimationPlaying) {
