@@ -191,6 +191,12 @@ this.buy = function(item) {
         var triangle = new paper.Path.RegularPolygon(new paper.Point(this.canvas.width/2, this.canvas.height - this.ROCKET_HEIGHT - 22), 3, 44);
         triangle.fillColor = 'red';
 
+        let leftTriangle = new paper.Path.RegularPolygon(new paper.Point(x, y + this.ROCKET_HEIGHT / 2), 3, this.ROCKET_HEIGHT / 2);
+        leftTriangle.fillColor = 'grey';
+       
+        let rightTriangle = new paper.Path.RegularPolygon(new paper.Point(x + this.ROCKET_WIDTH, y + this.ROCKET_HEIGHT / 2), 3, this.ROCKET_HEIGHT / 2);
+        rightTriangle.fillColor = 'grey';
+
     }
 
     stopSimulation() {
