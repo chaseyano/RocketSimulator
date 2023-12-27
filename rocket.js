@@ -6,6 +6,9 @@ class Rocket {
     ESCAPE_SPEED = 11200;
     ESCAPE_ALTITUDE = 160;
     SCALE = 1000000;
+    ROCKET_WIDTH = 75;
+    ROCKET_HEIGHT = 150;
+
     constructor(canvasId, material, fuelType) {
         this.watch = new Stopwatch();
         this.animationFrameId = null; // Property to store the animation frame request ID
@@ -128,6 +131,8 @@ this.buy = function(item) {
         }
         this.speed = 0.0;
         this.distance = 0.0;
+
+        this.setPreLaunch();
     }
  
 
@@ -176,6 +181,18 @@ this.buy = function(item) {
         rect.position = new paper.Point(this.canvas.width / 2, this.canvas.height / 2);
     }
 
+    drawRocket(x, y) {
+        let color = 'white';
+        let rect = new paper.Path.Rectangle({
+            point: [x, y],
+            size: [this.ROCKET_WIDTH, this.ROCKET_HEIGHT],
+            fillColor: color
+        });
+        var triangle = new paper.Path.RegularPolygon(new paper.Point(this.canvas.width/2, this.canvas.height - this.ROCKET_HEIGHT - 22), 3, 44);
+        triangle.fillColor = 'red';
+
+    }
+
     stopSimulation() {
         this.watch.stop();
         this.inFlight = false;
@@ -185,9 +202,10 @@ this.buy = function(item) {
 
     setPreLaunch() {
         this.statusText.content = 'PRE LAUNCH';
-        this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
-        this.drawRectangle('blue'); // Blue rectangle for 'PRE LAUNCH'
+        this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height / 2);
+        this.drawRocket(this.canvas.width / 2 - (this.ROCKET_WIDTH / 2) , this.canvas.height - this.ROCKET_HEIGHT); 
     }
+
     setIsLaunching() {
         this.statusText.content = 'IS LAUNCHING';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
