@@ -182,26 +182,40 @@ this.buy = function(item) {
     }
 
     drawRocket(x, y) {
-        let color = 'white';
-        let rect = new paper.Path.Rectangle({
-            point: [x, y],
-            size: [this.ROCKET_WIDTH, this.ROCKET_HEIGHT],
-            fillColor: color
+        // Draw the body of the rocket
+        let body = new paper.Path.Rectangle({
+            point: [x + this.ROCKET_WIDTH / 4, y],
+            size: [this.ROCKET_WIDTH / 2, this.ROCKET_HEIGHT],
+            fillColor: 'white'
         });
-        var triangle = new paper.Path.RegularPolygon(new paper.Point(this.canvas.width/2, this.canvas.height - this.ROCKET_HEIGHT - 22), 3, 44);
-        triangle.fillColor = 'red';
-        // Draw triangles on the sides
-        let leftTriangle = new paper.Path.RegularPolygon(new paper.Point(x, y + this.ROCKET_HEIGHT / 2), 3, this.ROCKET_HEIGHT / 2);
-        leftTriangle.fillColor = 'orange';
-
-        let rightTriangle = new paper.Path.RegularPolygon(new paper.Point(x + this.ROCKET_WIDTH, y + this.ROCKET_HEIGHT / 2), 3, this.ROCKET_HEIGHT / 2);
-        rightTriangle.fillColor = 'orange';
     
-        // Draw a small circle on the top
-        let circle = new paper.Path.Circle(new paper.Point(x + this.ROCKET_WIDTH / 2, y), 20);
-        circle.fillColor = 'green';
+        // Draw the top of the rocket
+        let top = new paper.Path.RegularPolygon({
+            center: [x + this.ROCKET_WIDTH / 2, y],
+            sides: 3,
+            radius: this.ROCKET_WIDTH / 2,
+            fillColor: 'white'
+        });
+        top.rotate(180);
+    
+        // Draw the fins of the rocket
+        let leftFin = new paper.Path.RegularPolygon({
+            center: [x, y + this.ROCKET_HEIGHT * 3 / 4],
+            sides: 3,
+            radius: this.ROCKET_WIDTH / 4,
+            fillColor: 'grey'
+        });
+        leftFin.rotate(180);
+    
+        let rightFin = new paper.Path.RegularPolygon({
+            center: [x + this.ROCKET_WIDTH, y + this.ROCKET_HEIGHT * 3 / 4],
+            sides: 3,
+            radius: this.ROCKET_WIDTH / 4,
+            fillColor: 'grey'
+        });
+        rightFin.rotate(180);
     }
-
+    
     stopSimulation() {
         this.watch.stop();
         this.inFlight = false;
