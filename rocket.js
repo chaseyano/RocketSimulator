@@ -184,8 +184,8 @@ this.buy = function(item) {
     drawRocket(x, y) {
         // Draw the body of the rocket
         let body = new paper.Path.Rectangle({
-            point: [x + this.ROCKET_WIDTH / 4, y],
-            size: [this.ROCKET_WIDTH / 2, this.ROCKET_HEIGHT],
+            point: [x + this.ROCKET_WIDTH / 4, y + this.ROCKET_HEIGHT / 4],
+            size: [this.ROCKET_WIDTH / 2, this.ROCKET_HEIGHT / 2],
             fillColor: 'white'
         });
     
@@ -193,7 +193,7 @@ this.buy = function(item) {
         let top = new paper.Path.RegularPolygon({
             center: [x + this.ROCKET_WIDTH / 2, y],
             sides: 3,
-            radius: this.ROCKET_WIDTH / 2,
+            radius: this.ROCKET_WIDTH / 4,
             fillColor: 'white'
         });
         top.rotate(180);
@@ -214,8 +214,16 @@ this.buy = function(item) {
             fillColor: 'grey'
         });
         rightFin.rotate(180);
-    }
     
+        // Draw the windows of the rocket
+        for (let i = 0; i < 3; i++) {
+            let window = new paper.Path.Circle({
+                center: [x + this.ROCKET_WIDTH / 2, y + this.ROCKET_HEIGHT / 4 + i * this.ROCKET_HEIGHT / 8],
+                radius: this.ROCKET_WIDTH / 8,
+                fillColor: 'red'
+            });
+        }
+    }
     stopSimulation() {
         this.watch.stop();
         this.inFlight = false;
