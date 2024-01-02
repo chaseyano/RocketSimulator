@@ -196,7 +196,7 @@ this.buy = function(item) {
             radius: this.ROCKET_WIDTH / 4,
             fillColor: 'white'
         });
-        top.rotate(180);
+   
     
         // Draw the fins of the rocket
         let leftFin = new paper.Path.RegularPolygon({
