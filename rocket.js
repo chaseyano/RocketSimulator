@@ -184,46 +184,35 @@ this.buy = function(item) {
     drawRocket(x, y) {
         // Draw the body of the rocket
         let body = new paper.Path.Rectangle({
-            point: [x + this.ROCKET_WIDTH / 4, y + this.ROCKET_HEIGHT / 4],
-            size: [this.ROCKET_WIDTH / 2, this.ROCKET_HEIGHT / 2],
+            point: [x, y + this.ROCKET_HEIGHT / 2],
+            size: [this.ROCKET_WIDTH, this.ROCKET_HEIGHT / 2],
             fillColor: 'white'
         });
     
         // Draw the top of the rocket
         let top = new paper.Path.RegularPolygon({
-            center: [x + this.ROCKET_WIDTH / 2, y],
+            center: [x + this.ROCKET_WIDTH / 2, y + this.ROCKET_HEIGHT / 4],
             sides: 3,
-            radius: this.ROCKET_WIDTH / 4,
+            radius: this.ROCKET_WIDTH / 2,
             fillColor: 'white'
         });
-   
-    
+
+
         // Draw the fins of the rocket
-        let leftFin = new paper.Path.RegularPolygon({
-            center: [x, y + this.ROCKET_HEIGHT * 3 / 4],
-            sides: 3,
-            radius: this.ROCKET_WIDTH / 4,
+        let leftFin = new paper.Path({
+            segments: [[x, y + this.ROCKET_HEIGHT], [x, y + this.ROCKET_HEIGHT * 3 / 4], [x + this.ROCKET_WIDTH / 4, y + this.ROCKET_HEIGHT]],
+            closed: true,
             fillColor: 'grey'
         });
-        leftFin.rotate(180);
-    
-        let rightFin = new paper.Path.RegularPolygon({
-            center: [x + this.ROCKET_WIDTH, y + this.ROCKET_HEIGHT * 3 / 4],
-            sides: 3,
-            radius: this.ROCKET_WIDTH / 4,
+        let rightFin = new paper.Path({
+            segments: [[x + this.ROCKET_WIDTH, y + this.ROCKET_HEIGHT], [x + this.ROCKET_WIDTH, y + this.ROCKET_HEIGHT * 3 / 4], [x + this.ROCKET_WIDTH * 3 / 4, y + this.ROCKET_HEIGHT]],
+            closed: true,
             fillColor: 'grey'
         });
-        rightFin.rotate(180);
     
-        // Draw the windows of the rocket
-        for (let i = 0; i < 3; i++) {
-            let window = new paper.Path.Circle({
-                center: [x + this.ROCKET_WIDTH / 2, y + this.ROCKET_HEIGHT / 4 + i * this.ROCKET_HEIGHT / 8],
-                radius: this.ROCKET_WIDTH / 8,
-                fillColor: 'red'
-            });
-        }
+        
     }
+    
     stopSimulation() {
         this.watch.stop();
         this.inFlight = false;
