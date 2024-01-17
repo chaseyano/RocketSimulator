@@ -10,6 +10,10 @@ class Rocket {
     ROCKET_HEIGHT = 300;
 
     constructor(canvasId, material, fuelType) {
+        this.rocketParts = []; // Array to hold references to rocket parts
+
+
+
         this.watch = new Stopwatch();
         this.animationFrameId = null; // Property to store the animation frame request ID
 
@@ -182,6 +186,8 @@ this.buy = function(item) {
     }
 
     drawRocket(x, y) {
+        this.clearRocket();
+
         // Draw the body of the rocket
         let body = new paper.Path.Rectangle({
             point: [x, y + this.ROCKET_HEIGHT / 2],
@@ -213,6 +219,14 @@ this.buy = function(item) {
     
         leftFin.scale(-1, 1, leftFin.bounds.center);
         rightFin.scale(-1, 1, rightFin.bounds.center);
+
+        this.rocketParts.push(body, top, leftFin, rightFin);
+
+    }
+    clearRocket() {
+        // Iterate over rocket parts and remove them
+        this.rocketParts.forEach(part => part.remove());
+        this.rocketParts = []; // Reset the array after clearing
     }
     
     stopSimulation() {
@@ -229,10 +243,11 @@ this.buy = function(item) {
     }
 
     setIsLaunching() {
+        this.clearRocket();
         this.statusText.content = 'IS LAUNCHING';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
-        this.drawRectangle('orange'); // Orange rectangle for 'IS LAUNCHING'
         this.isLaunchingAnimationPlaying = true;
+        this.drawRocket(this.canvas.width / 2 - (this.ROCKET_WIDTH / 2) , this.canvas.height / 2 - this.ROCKET_HEIGHT); 
 
         // Set a timeout to transition to inFlight after 1 second
         setTimeout(() => {
