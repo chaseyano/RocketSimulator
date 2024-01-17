@@ -1,4 +1,4 @@
-export const budget = 1234;
+export const budget = 5000;
 
 export const materialPrices = {
     titanium: 100,

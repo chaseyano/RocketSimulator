@@ -136,6 +136,10 @@ this.buy = function(item) {
         this.speed = 0.0;
         this.distance = 0.0;
 
+        this.isShaking = false;
+        this.shakeMultiplier = 1;
+        this.shakeOffset = 0;
+
         this.setPreLaunch();
     }
  
@@ -170,6 +174,7 @@ this.buy = function(item) {
  
     startAnimation() {
         if (!this.inFlight) {
+
             this.inFlight = true;
             this.animate();
         }
@@ -186,43 +191,67 @@ this.buy = function(item) {
     }
 
     drawRocket(x, y) {
-        this.clearRocket();
+        if (this.rocketParts.length === 0) {
+                // Draw the body of the rocket
+            let body = new paper.Path.Rectangle({
+                point: [x, y + this.ROCKET_HEIGHT / 2],
+                size: [this.ROCKET_WIDTH, this.ROCKET_HEIGHT / 2],
+                fillColor: 'white'
+            });
+        
+            const TOP_SHIFT = 54;
+            // Draw the top of the rocket
+            let top = new paper.Path.RegularPolygon({
+                center: [x + this.ROCKET_WIDTH / 2, y + this.ROCKET_HEIGHT / 4 + TOP_SHIFT],
+                sides: 3,
+                radius: this.ROCKET_WIDTH / 2 * 1.185,
+                fillColor: 'red'
+            });
 
-        // Draw the body of the rocket
-        let body = new paper.Path.Rectangle({
-            point: [x, y + this.ROCKET_HEIGHT / 2],
-            size: [this.ROCKET_WIDTH, this.ROCKET_HEIGHT / 2],
-            fillColor: 'white'
-        });
-    
-        const TOP_SHIFT = 54;
-        // Draw the top of the rocket
-        let top = new paper.Path.RegularPolygon({
-            center: [x + this.ROCKET_WIDTH / 2, y + this.ROCKET_HEIGHT / 4 + TOP_SHIFT],
-            sides: 3,
-            radius: this.ROCKET_WIDTH / 2 * 1.185,
-            fillColor: 'red'
-        });
+            let FIN_SHIFT = 18;
+            // Draw the fins of the rocket
+            let leftFin = new paper.Path({
+                segments: [[x - FIN_SHIFT, y + this.ROCKET_HEIGHT], [x - FIN_SHIFT, y + this.ROCKET_HEIGHT * 3 / 4], [x - FIN_SHIFT + this.ROCKET_WIDTH / 4, y + this.ROCKET_HEIGHT]],
+                closed: true,
+                fillColor: 'grey'
+            });
+            let rightFin = new paper.Path({
+                segments: [[x + this.ROCKET_WIDTH + FIN_SHIFT, y + this.ROCKET_HEIGHT], [x + this.ROCKET_WIDTH + FIN_SHIFT, y + this.ROCKET_HEIGHT * 3 / 4], [x + this.ROCKET_WIDTH * 3 / 4 + FIN_SHIFT, y + this.ROCKET_HEIGHT]],
+                closed: true,
+                fillColor: 'grey'
+            });
+        
+            leftFin.scale(-1, 1, leftFin.bounds.center);
+            rightFin.scale(-1, 1, rightFin.bounds.center);
 
-        let FIN_SHIFT = 18;
-        // Draw the fins of the rocket
-        let leftFin = new paper.Path({
-            segments: [[x - FIN_SHIFT, y + this.ROCKET_HEIGHT], [x - FIN_SHIFT, y + this.ROCKET_HEIGHT * 3 / 4], [x - FIN_SHIFT + this.ROCKET_WIDTH / 4, y + this.ROCKET_HEIGHT]],
-            closed: true,
-            fillColor: 'grey'
+            this.rocketParts.push(body, top, leftFin, rightFin);
+    } else {
+        this.rocketParts.forEach(part => {
+            // Adjust each part's position based on the new x and y
+            let deltaX = x - part.bounds.center.x;
+            let deltaY = y - part.bounds.center.y;
+            part.translate(new paper.Point(deltaX, deltaY));
         });
-        let rightFin = new paper.Path({
-            segments: [[x + this.ROCKET_WIDTH + FIN_SHIFT, y + this.ROCKET_HEIGHT], [x + this.ROCKET_WIDTH + FIN_SHIFT, y + this.ROCKET_HEIGHT * 3 / 4], [x + this.ROCKET_WIDTH * 3 / 4 + FIN_SHIFT, y + this.ROCKET_HEIGHT]],
-            closed: true,
-            fillColor: 'grey'
-        });
-    
-        leftFin.scale(-1, 1, leftFin.bounds.center);
-        rightFin.scale(-1, 1, rightFin.bounds.center);
-
-        this.rocketParts.push(body, top, leftFin, rightFin);
-
     }
+    }
+    toggleShake(multiplier) {
+        this.isShaking = !this.isShaking;
+        this.shakeMultiplier = multiplier;
+    
+        if (this.isShaking) {
+            this.shakeEffect = (event) => {
+                this.shakeOffset = (Math.random() - 0.5) * this.shakeMultiplier;
+                this.rocketParts.forEach(part => {
+                    part.position.x += this.shakeOffset;
+                });
+            };
+            paper.view.onFrame = this.shakeEffect;
+        } else {
+            paper.view.onFrame = null; // Stop the shake effect
+            // Reset the position of the rocket parts to their original position if needed
+        }
+    }
+    
     clearRocket() {
         // Iterate over rocket parts and remove them
         this.rocketParts.forEach(part => part.remove());
@@ -243,37 +272,64 @@ this.buy = function(item) {
     }
 
     setIsLaunching() {
-        this.clearRocket();
+        // Store start and end positions
+        const startY = this.canvas.height - this.ROCKET_HEIGHT;
+        const endY = this.canvas.height / 2 - this.ROCKET_HEIGHT;
+        const startTime = new Date().getTime();
+    
+        // Start with the rocket at its initial position
+        this.drawRocket(this.canvas.width / 2 - (this.ROCKET_WIDTH / 2), startY);
+        this.toggleShake(10); // Start the shake with a reasonable multiplier
+    
+        // Update the status text
         this.statusText.content = 'IS LAUNCHING';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.isLaunchingAnimationPlaying = true;
-        this.drawRocket(this.canvas.width / 2 - (this.ROCKET_WIDTH / 2) , this.canvas.height / 2 - this.ROCKET_HEIGHT); 
-
-        // Set a timeout to transition to inFlight after 1 second
-        setTimeout(() => {
+    
+        paper.view.onFrame = (event) => {
             if (this.isLaunchingAnimationPlaying) {
-                this.setInFlight();
+                const currentTime = new Date().getTime();
+                const elapsedTime = (currentTime - startTime) / 1000; // Convert to seconds
+    
+                if (elapsedTime < 1) {
+                    let currentY = startY + (endY - startY) * elapsedTime;
+                    let shakeX = this.isShaking ? (Math.random() - 0.5) * this.shakeMultiplier : 0;
+                    // Update the rocket's position with vertical and horizontal (shake) movement
+                    this.drawRocket(this.canvas.width / 2 - (this.ROCKET_WIDTH / 2) + shakeX, currentY);
+                } else {
+                    // Stop the animation and transition to inFlight
+                    this.isLaunchingAnimationPlaying = false;
+                    this.toggleShake(0); // Stop the shake
+                    paper.view.onFrame = null; // Remove the onFrame event handler
+                    this.setInFlight();
+                }
             }
-        }, 1000); // 1 second delay
+        };
     }
+    
 
     setInFlight() {
+        
         if (!this.isLaunchingAnimationPlaying) {
             return; // Do not transition to inFlight if isLaunching animation is not playing
         }
         this.isLaunchingAnimationPlaying = false;
         this.statusText.content = 'IN FLIGHT';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
-        this.drawRectangle('lightblue'); // Light blue rectangle for 'IN FLIGHT'
+        this.drawRocket(this.canvas.width / 2 - (this.ROCKET_WIDTH / 2) , this.canvas.height / 2 - this.ROCKET_HEIGHT); 
     }
 
     setWin() {
+        this.clearRocket();
+
         this.statusText.content = 'WIN';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.drawRectangle('gold'); // Gold rectangle for 'WIN'
     }
 
     setLoss() {
+        this.clearRocket();
+
         this.statusText.content = 'LOSS';
         this.statusText.position = new paper.Point(this.canvas.width / 2, this.canvas.height - 150);
         this.drawRectangle('red'); // Red rectangle for 'LOSS'
