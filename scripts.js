@@ -4,9 +4,19 @@ var money = budget;
 
 document.addEventListener('DOMContentLoaded', () => {
     // This code will run once the DOM is fully loaded
-    const canvasElement = document.getElementById('myCanvas');
-    canvasElement.width = window.innerWidth;
-    canvasElement.height = window.innerHeight - 50; // leaving 50px gap at the bottom for UI elements
+    function resizeCanvas() {
+        const canvasElement = document.getElementById('myCanvas');
+
+        canvasElement.width = window.innerWidth;
+        canvasElement.height = window.innerHeight - 50; // leaving 50px gap at the bottom for UI elements
+        const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen');
+    }
+
+    // Initial resize
+    resizeCanvas();
+
+    // Resize canvas on window resize
+    window.addEventListener('resize', resizeCanvas);
 
     const myRocket = new Rocket('myCanvas', 'titanium', 'hydrogen'); // this is just to clear the screen.
 

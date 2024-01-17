@@ -7,7 +7,7 @@ class Rocket {
     ESCAPE_ALTITUDE = 160;
     SCALE = 1000000;
     ROCKET_WIDTH = 75;
-    ROCKET_HEIGHT = 150;
+    ROCKET_HEIGHT = 300;
 
     constructor(canvasId, material, fuelType) {
         this.watch = new Stopwatch();
@@ -189,28 +189,30 @@ this.buy = function(item) {
             fillColor: 'white'
         });
     
+        const TOP_SHIFT = 54;
         // Draw the top of the rocket
         let top = new paper.Path.RegularPolygon({
-            center: [x + this.ROCKET_WIDTH / 2, y + this.ROCKET_HEIGHT / 4],
+            center: [x + this.ROCKET_WIDTH / 2, y + this.ROCKET_HEIGHT / 4 + TOP_SHIFT],
             sides: 3,
-            radius: this.ROCKET_WIDTH / 2,
-            fillColor: 'white'
+            radius: this.ROCKET_WIDTH / 2 * 1.185,
+            fillColor: 'red'
         });
 
-
+        let FIN_SHIFT = 18;
         // Draw the fins of the rocket
         let leftFin = new paper.Path({
-            segments: [[x, y + this.ROCKET_HEIGHT], [x, y + this.ROCKET_HEIGHT * 3 / 4], [x + this.ROCKET_WIDTH / 4, y + this.ROCKET_HEIGHT]],
+            segments: [[x - FIN_SHIFT, y + this.ROCKET_HEIGHT], [x - FIN_SHIFT, y + this.ROCKET_HEIGHT * 3 / 4], [x - FIN_SHIFT + this.ROCKET_WIDTH / 4, y + this.ROCKET_HEIGHT]],
             closed: true,
             fillColor: 'grey'
         });
         let rightFin = new paper.Path({
-            segments: [[x + this.ROCKET_WIDTH, y + this.ROCKET_HEIGHT], [x + this.ROCKET_WIDTH, y + this.ROCKET_HEIGHT * 3 / 4], [x + this.ROCKET_WIDTH * 3 / 4, y + this.ROCKET_HEIGHT]],
+            segments: [[x + this.ROCKET_WIDTH + FIN_SHIFT, y + this.ROCKET_HEIGHT], [x + this.ROCKET_WIDTH + FIN_SHIFT, y + this.ROCKET_HEIGHT * 3 / 4], [x + this.ROCKET_WIDTH * 3 / 4 + FIN_SHIFT, y + this.ROCKET_HEIGHT]],
             closed: true,
             fillColor: 'grey'
         });
     
-        
+        leftFin.scale(-1, 1, leftFin.bounds.center);
+        rightFin.scale(-1, 1, rightFin.bounds.center);
     }
     
     stopSimulation() {
