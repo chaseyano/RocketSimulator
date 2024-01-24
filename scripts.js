@@ -39,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const budgetDisplay = document.getElementById('budgetAmount');
     budgetDisplay.textContent = budget.toString();
 
+    const materialWeightDisplay = document.getElementById('materialWeight');
+    materialWeightDisplay.textContent = materialPrices[material].toString();
+
     const materialSelect = document.getElementById('material');
     const fuelSelect = document.getElementById('fuelType');
 
@@ -95,6 +98,20 @@ document.addEventListener('DOMContentLoaded', () => {
         let updatedBudget = getUpdatedBudget();
         budgetDisplay.textContent = updatedBudget.toString();
     }
+
+    function updateDisplay(type, display) {
+        var newContent;
+        switch(type) {
+            case 'budget':
+                newContent = getUpdatedBudget();
+            // case 'materialWeight':
+            //     newContent = getUpdatedMaterialWeight();
+            // case 'materialWeight':
+            //     newContent = getUpdatedFuelWeight();
+            // case ''
+        }
+    }
+    
 
     const slider = document.getElementById("fuelSlider");
     const output = document.getElementById("sliderValue");
