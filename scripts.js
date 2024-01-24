@@ -85,6 +85,15 @@ document.addEventListener('DOMContentLoaded', () => {
         budgetDisplay.textContent = updatedBudget.toString();
     }
 
+    const slider = document.getElementById("myRange");
+    const output = document.getElementById("sliderValue");
+    output.innerHTML = slider.value; // Display the default slider value
+
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+    }
+
     // Function to show the modal
 function showModal(message) {
     let modal = document.getElementById("myModal");
