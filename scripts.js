@@ -87,12 +87,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const slider = document.getElementById("myRange");
     const output = document.getElementById("sliderValue");
-    output.innerHTML = slider.value; // Display the default slider value
 
-    // Update the current slider value (each time you drag the slider handle)
+    // Set the initial value of the input field
+    output.value = slider.value;
+
+    // Update the slider value when you type in the input field
+    output.oninput = function() {
+        // Check if the input value is within the range
+        if (this.value >= parseInt(slider.min) && this.value <= parseInt(slider.max)) {
+            slider.value = this.value;
+        }
+    };
+
+    // Update the input field value when you move the slider
     slider.oninput = function() {
-        output.innerHTML = this.value;
-    }
+        output.value = this.value;
+    };
 
     // Function to show the modal
 function showModal(message) {
