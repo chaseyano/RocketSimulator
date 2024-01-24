@@ -180,6 +180,7 @@ this.buy = function(item) {
         }
     }
  
+
     drawRectangle(color) {
         // Assuming 'paper' is your drawing library and you have a 'canvas' defined
         let rect = new paper.Path.Rectangle({
@@ -401,5 +402,5 @@ this.buy = function(item) {
 
  }
 
- 
+
 export default Rocket; 
