@@ -97,21 +97,6 @@ this.buy = function(item) {
     // Increase the cost for the next purchase
     this.costs[item] *= 1.1; // Increase cost by 10%
 };
-          // Initialize budget
-          this.budget = 100000000; // $100 million
-
-          // Deduct the cost of the selected material and fuel type from the budget
-          // Assume 1000 kg of each material and fuel type for simplicity
-          this.budget -= this.costs[material] * 1000;
-          this.budget -= this.costs[fuelType] * 1000;
-  
-          // Check if the budget has been exceeded
-          if (this.budget < 0) {
-              console.log('Budget exceeded!');
-              return;
-          }
-
- 
         this.force = 0.0;
         this.fuelWeight = 0.0;
 

@@ -42,9 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const materialSelect = document.getElementById('material');
     const fuelSelect = document.getElementById('fuelType');
 
+
+    const fuelInput = document.getElementById('sliderValue');
+    const fuelSlider = document.getElementById('fuelSlider');
+
+
     // Event Listeners for Dropdowns
     materialSelect.addEventListener('change', updateBudgetDisplay);
     fuelSelect.addEventListener('change', updateBudgetDisplay);
+    fuelInput.addEventListener('change', updateBudgetDisplay);
+    fuelSlider.addEventListener('change', updateBudgetDisplay);
+
+
     populateDropdown('material', materialPrices);
     populateDropdown('fuelType', fuelPrices);
 
@@ -66,9 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function getUpdatedBudget() {
         let selectedMaterial = materialSelect.value;
         let selectedFuel = fuelSelect.value;
+        let fuelAmount = fuelInput.value;
+        let fuelCost = fuelPrices[selectedFuel] * fuelAmount;
         let totalCost = 0;
         totalCost += selectedMaterial !== 'none' ? materialPrices[selectedMaterial] : 0;
-        totalCost += selectedFuel !== 'none' ? fuelPrices[selectedFuel] : 0;
+        totalCost += selectedFuel !== 'none' ? fuelCost : 0;
 
         let updatedBudget = budget - totalCost;
         return updatedBudget;
@@ -85,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         budgetDisplay.textContent = updatedBudget.toString();
     }
 
-    const slider = document.getElementById("myRange");
+    const slider = document.getElementById("fuelSlider");
     const output = document.getElementById("sliderValue");
 
     // Set the initial value of the input field
